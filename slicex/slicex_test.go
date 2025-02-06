@@ -82,10 +82,25 @@ func TestFindAll(t *testing.T) {
 
 	t.Run("elements not found", func(t *testing.T) {
 		words := []string{"hello", "go", "slicex"}
-		want := []string{}
+		var want []string
 
 		got := FindAll(words, func(x string) bool {
 			return len(x) > 10
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %+v want %+v", got, want)
+		}
+	})
+}
+
+func TestMap(t *testing.T) {
+	t.Run("mapping items", func(t *testing.T) {
+		words := []string{"hello", "go", "slicex"}
+		want := []int{5, 2, 6}
+
+		got := Map(words, func(w string) int {
+			return len(w)
 		})
 
 		if !reflect.DeepEqual(got, want) {
