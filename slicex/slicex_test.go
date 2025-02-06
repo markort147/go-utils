@@ -1,6 +1,9 @@
 package slicex
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestFind(t *testing.T) {
 	t.Run("find a even number", func(t *testing.T) {
@@ -46,6 +49,47 @@ func TestFind(t *testing.T) {
 
 		if err != ErrElementNotFound {
 			t.Errorf("expected error %q but got %q", ErrElementNotFound, err)
+		}
+	})
+}
+
+func TestFindAll(t *testing.T) {
+	t.Run("find even numbers", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5}
+		want := []int{2, 4}
+
+		got := FindAll(numbers, func(x int) bool {
+			return x%2 == 0
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %+v want %+v", got, want)
+		}
+	})
+
+	t.Run("find short words", func(t *testing.T) {
+		words := []string{"hello", "go", "slicex"}
+		want := []string{"go"}
+
+		got := FindAll(words, func(x string) bool {
+			return len(x) < 3
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %+v want %+v", got, want)
+		}
+	})
+
+	t.Run("elements not found", func(t *testing.T) {
+		words := []string{"hello", "go", "slicex"}
+		want := []string{}
+
+		got := FindAll(words, func(x string) bool {
+			return len(x) > 10
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %+v want %+v", got, want)
 		}
 	})
 }

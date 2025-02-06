@@ -1,22 +1,22 @@
 package slicex
 
-type SlicexErr string
-
-const (
-	ErrElementNotFound = SlicexErr("element not found")
-)
-
-func (s SlicexErr) Error() string {
-	return string(s)
-}
-
-func Find[T any](numbers []T, predicate func(T) bool) (T, error) {
-	for _, n := range numbers {
-		if predicate(n) {
-			return n, nil
+func Find[T any](items []T, predicate func(T) bool) (T, error) {
+	for _, item := range items {
+		if predicate(item) {
+			return item, nil
 		}
 	}
 
 	var zero T
 	return zero, ErrElementNotFound
+}
+
+func FindAll[T any](items []T, predicate func(x T) bool) []T {
+	filtered := make([]T, 0)
+	for _, item := range items {
+		if predicate(item) {
+			filtered = append(filtered, item)
+		}
+	}
+	return filtered
 }
